@@ -30,6 +30,11 @@ public ResponseEntity<TempDTO> saveTemp(@RequestBody TempDTO tempDTO) {
 
 }
 
+@GetMapping("/hi")
+public String sendHello(){
+    return ("Hello Dala");
+}
+
 
 
 }
