@@ -35,10 +35,10 @@ public ResponseEntity saveTemp(@RequestBody TempDTO tempDTO) {
 
 }
 @PostMapping("/save-user")
-    public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity saveUser(@RequestBody UserDTO userDTO) {
         System.out.println("Received User");
-        authenticationService.saveUser( userDTO);
-        return new ResponseEntity<>( userDTO, HttpStatus.CREATED);
+        ResponseDTO responseDTO = authenticationService.saveUser( userDTO);
+        return new ResponseEntity<>( responseDTO, responseDTO.getStatus());
     }
 
 
