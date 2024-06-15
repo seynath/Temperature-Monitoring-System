@@ -23,7 +23,7 @@ public class TempService {
     private SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    private com.sit.sit_server.service.MailService mailService;
+    private MailService mailService;
 
     @Value("${max.allowed.temperature}")
     private double MAX_ALLOWED_TEMPERATURE;
