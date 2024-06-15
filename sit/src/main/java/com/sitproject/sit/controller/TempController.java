@@ -1,6 +1,9 @@
 package com.sitproject.sit.controller;
 
+import com.sitproject.sit.dto.ResponseDTO;
 import com.sitproject.sit.dto.TempDTO;
+import com.sitproject.sit.dto.UserDTO;
+import com.sitproject.sit.service.AuthenticationService;
 import com.sitproject.sit.service.TempService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,15 +23,23 @@ public class TempController {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private AuthenticationService authenticationService;
 
 
 @PostMapping("/save-temp")
-public ResponseEntity<TempDTO> saveTemp(@RequestBody TempDTO tempDTO) {
-    tempService.saveTemp( tempDTO);
-//    messagingTemplate.convertAndSend("/topic/temperature", tempDTO);
-    return new ResponseEntity<>( tempDTO, HttpStatus.CREATED);
+public ResponseEntity saveTemp(@RequestBody TempDTO tempDTO) {
+    System.out.println("Received Temperature");
+    ResponseDTO responseDTO =  tempService.saveTemp( tempDTO);
+    return new ResponseEntity<>( responseDTO, responseDTO.getStatus());
 
 }
+@PostMapping("/save-user")
+    public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO) {
+        System.out.println("Received User");
+        authenticationService.saveUser( userDTO);
+        return new ResponseEntity<>( userDTO, HttpStatus.CREATED);
+    }
 
 
 
