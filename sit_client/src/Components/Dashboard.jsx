@@ -11,34 +11,19 @@ const Dashboard = () => {
     //   timestamp: "2024-04-13 22:27:45"
     // });
 
-
     useEffect(() => {
-        const token = sessionStorage.getItem('token');
-        console.log("Token:", token);
-
-        const socket = new SockJS(`http://localhost:8080/temperature`);
+        const socket = new SockJS("http://localhost:8080/temperature");
         const stompClient = Stomp.over(socket);
 
-        stompClient.connect({ Authorization: `Bearer ${token}` }, () => {
-            console.log("Connected to WebSocket");
-
-            stompClient.subscribe("/topic/temperature", (message) => {
-                const tempData = JSON.parse(message.body);
-                setTemperatureData((prevData) => [...prevData, tempData]);
-            });
-        }, (error) => {
-            console.error("Connection error", error);
+        stompClient.connect({}, () => {
+            stompClient.subscribe("/topic/temperature",
+                (message) => {
+                    const tempData = JSON.parse(message.body);
+                    setTemperatureData((prevData) => [...prevData, tempData]);
+                }
+            );
         });
-
-        return () => {
-            if (stompClient) {
-                stompClient.disconnect(() => {
-                    console.log("Disconnected from WebSocket");
-                });
-            }
-        };
     }, []);
-
     return (
         <div>
             <>
