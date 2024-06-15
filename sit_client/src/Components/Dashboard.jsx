@@ -37,6 +37,13 @@ const Dashboard = () => {
         <div>
             <>
                 <div>
+                    <iframe
+                        width="full"
+                        height="800"
+                        seamless
+                        src="http://172.16.16.103:8088/superset/dashboard/p/evkPGvOnD5w/"
+                    >
+                    </iframe>
                     <h1>Temperature Monitor</h1>
                     <ul>
                         {temperatureData.map((data, index) => (
