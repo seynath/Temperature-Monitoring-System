@@ -14,7 +14,16 @@ const Dashboard = () => {
     useEffect(() => {
         const socket = new SockJS("http://localhost:8080/temperature");
         const stompClient = Stomp.over(socket);
-
+        //tried on this way but not working
+        // const token = sessionStorage.getItem("token");
+        // stompClient.connect({Authorization: `Bearer ${token}`}, () => {
+        //     stompClient.subscribe("/topic/temperature",
+        //         (message) => {
+        //             const tempData = JSON.parse(message.body);
+        //             setTemperatureData((prevData) => [...prevData, tempData]);
+        //         }
+        //     );
+        // });
         stompClient.connect({}, () => {
             stompClient.subscribe("/topic/temperature",
                 (message) => {
