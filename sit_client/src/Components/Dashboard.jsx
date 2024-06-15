@@ -98,6 +98,7 @@ const ColorfulBar = styled(LinearProgress)(({ theme }) => ({
                 <Box className="w-full">
                   <Box className="flex justify-between items-center">
                     <Box>
+                    <h3 className="text-xl text-gray-800 pb-5">Machine {id}</h3>
                       <Box mb={1}>
                         <Typography variant="body2"><strong>Device ID:</strong>{machineData[id].device_id || 'Loading...'}</Typography>
                       </Box>
