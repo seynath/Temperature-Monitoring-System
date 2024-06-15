@@ -5,10 +5,13 @@ import com.sitproject.sit.entity.Temp;
 import com.sitproject.sit.repository.TempRepository;
 import com.sitproject.sit.util.varList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -19,6 +22,12 @@ public class TempService {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
+    @Autowired
+    private com.sit.sit_server.service.MailService mailService;
+
+    @Value("${max.allowed.temperature}")
+    private double MAX_ALLOWED_TEMPERATURE;
+
         public ResponseDTO saveTemp(TempDTO tempDTO) {
             ResponseDTO responseDTO = new ResponseDTO();
             try {
@@ -27,6 +36,15 @@ public class TempService {
                 System.out.println("Tracked Temperature to DB");
                 messagingTemplate.convertAndSend("/topic/temperature", tempDTO);
                 System.out.println("Sent Temperature to WebSocket");
+
+                // Check if temperature exceeds the limit
+                if (temp.getTemperature() > MAX_ALLOWED_TEMPERATURE) {
+                    String subject = "Temperature Alert";
+                    String body = "The temperature is above the allowed limit. Device ID: " + temp.getDevice_id() + ", Temperature: " + temp.getTemperature() + "°C, Timestamp: " + temp.getTimestamp();
+                    List<String> recipients = getRecipients();
+                    mailService.sendEmail(recipients, subject, body);
+                }
+
                 responseDTO.setCode(varList.RSP_SUCCES);
                 responseDTO.setMessage("Success");
                 responseDTO.setContent(tempDTO);
@@ -39,4 +57,13 @@ public class TempService {
             }
             return responseDTO;
         }
+
+    private List<String> getRecipients() {
+        // Implement logic to retrieve recipients from a predefined list or another source
+        // For example:
+        // return userRepository.findUsersWithEmailAlerts();
+        return List.of("hashanruchira02@gmail.com", "hashanruchira98@gmail.com");
+    }
+
+
 }
