@@ -1,8 +1,9 @@
 package com.sitproject.sit.service;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.body.MultipartBody;
+
+import kong.unirest.HttpResponse;
+import kong.unirest.MultipartBody;
+import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

@@ -1,5 +1,4 @@
 package com.sitproject.sit.controller;
-
 import com.sitproject.sit.dto.ResponseDTO;
 import com.sitproject.sit.dto.TempDTO;
 import com.sitproject.sit.dto.UserDTO;
@@ -23,7 +22,6 @@ public class TempController {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
-
 
 
 @PostMapping("/save-temp")

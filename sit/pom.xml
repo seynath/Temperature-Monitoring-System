@@ -82,10 +82,11 @@
             <artifactId>spring-webmvc</artifactId>
             <version>6.1.5</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.konghq/unirest-java -->
         <dependency>
-            <groupId>com.mashape.unirest</groupId>
+            <groupId>com.konghq</groupId>
             <artifactId>unirest-java</artifactId>
-            <version>1.4.9</version>
+            <version>3.14.5</version>
         </dependency>
     </dependencies>
 
