@@ -23,8 +23,7 @@ public class TempController {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
-    @Autowired
-    private AuthenticationService authenticationService;
+
 
 
 @PostMapping("/save-temp")
@@ -34,12 +33,7 @@ public ResponseEntity saveTemp(@RequestBody TempDTO tempDTO) {
     return new ResponseEntity<>( responseDTO, responseDTO.getStatus());
 
 }
-@PostMapping("/save-user")
-    public ResponseEntity saveUser(@RequestBody UserDTO userDTO) {
-        System.out.println("Received User");
-        ResponseDTO responseDTO = authenticationService.saveUser( userDTO);
-        return new ResponseEntity<>( responseDTO, responseDTO.getStatus());
-    }
+
 
 
 
