@@ -2,7 +2,9 @@ package com.sitproject.sit.service;
 import com.sitproject.sit.dto.ResponseDTO;
 import com.sitproject.sit.dto.TempDTO;
 import com.sitproject.sit.entity.Temp;
+import com.sitproject.sit.entity.User;
 import com.sitproject.sit.repository.TempRepository;
+import com.sitproject.sit.repository.UserRepo;
 import com.sitproject.sit.util.varList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +13,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +24,9 @@ public class TempService {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+
+    @Autowired
+    private UserRepo userRepo;
 
     @Autowired
     private MailService mailService;
@@ -58,12 +64,18 @@ public class TempService {
             return responseDTO;
         }
 
-    private List<String> getRecipients() {
-        // Implement logic to retrieve recipients from a predefined list or another source
-        // For example:
-        // return userRepository.findUsersWithEmailAlerts();
-        return List.of("hashanruchira02@gmail.com", "hashanruchira98@gmail.com");
+//    private List<String> getRecipients() {
+//        // Implement logic to retrieve recipients from a predefined list or another source
+//        return List.of("hashanruchira02@gmail.com", "ishadyaap@gmail.com");
+//    }
+    private List<String> getRecipients(){
+            List<User> users = userRepo.findAll();
+            List<String> emailList = new ArrayList<>();
+            for(User us: users){
+                emailList.add(us.getUsername());
+            }
+        System.out.println(emailList);
+            return emailList;
     }
-
-
 }
+
