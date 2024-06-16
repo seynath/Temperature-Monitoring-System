@@ -3,8 +3,11 @@ import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import LinearProgress from '@mui/material/LinearProgress';
 import { styled } from '@mui/material/styles';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Card, CardHeader, Typography } from '@mui/material';
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Accordion, AccordionSummary, Box, Button, Card, CardHeader, Typography } from '@mui/material';
+import {useNavigate} from "react-router-dom";
+import Swal from "sweetalert2";
+
+
 
 const ColorfulBar = styled(LinearProgress)(({ theme }) => ({
     height: 10,
@@ -57,26 +60,58 @@ const Dashboard = () => {
         });
     },[]);
 
-    const downloadCSV = () => {
-        const csvData = [
-            ["Device ID", "Temperature", "Timestamp"],
-            ...temperatureData.map((data) => [
-                data.device_id,
-                `${data.temperature}°C`,
-            data.timestamp,
-    ]),
-    ].map((row) => row.join(","));
+    const nav = useNavigate();
+    useEffect(() => {
+        if (!sessionStorage.getItem('token')) {
+            nav('/');
+        }
+    }, [sessionStorage.getItem('token')]);
 
-        const blob = new Blob([csvData.join("\n")], { type: "text/csv" });
-        const a = document.createElement("a");
-        const url = window.URL.createObjectURL(blob);
-        a.href = url;
-        a.download = "data.csv";
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
+
+    const downloadCSV = () => {
+        Swal.fire({
+            title: 'Are you sure you want to download the report?',
+            showDenyButton: true,
+            confirmButtonText: Download,
+            denyButtonText: Cancel,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const csvData = [
+                    ["Device ID", "Temperature", "Timestamp"],
+                    ...temperatureData.map((data) => [
+                        data.device_id,
+                `${data.temperature}°C`,
+                    data.timestamp,
+            ]),
+            ].map((row) => row.join(","));
+
+                const blob = new Blob([csvData.join("\n")], { type: "text/csv" });
+                const a = document.createElement("a");
+                const url = window.URL.createObjectURL(blob);
+                a.href = url;
+                a.download = "data.csv";
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            }
+        });
+
     };
+    const logout = ()=>{
+        Swal.fire({
+            title: 'Are you sure you want to logout?',
+            showDenyButton: true,
+            confirmButtonText: Logout,
+            denyButtonText: Cancel,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                sessionStorage.removeItem('token');
+                nav('/')
+            }
+
+        })
+    }
     return (
         <div>
 
@@ -129,9 +164,12 @@ const Dashboard = () => {
                     ))}
                 </Card>
             </Box>
+            <div className='flex w-full p-4 justify-center items-center'>
+                <Button variant="contained" color="error" className='w-72' onClick={logout}><span>Log out</span></Button>
+            </div>
         </div>
 
     );
 };
 
-export default Dashboard;
+export default Dashboard;
